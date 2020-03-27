@@ -17,12 +17,13 @@ main:
     push {lr}
 
     mov r2, #0          @ nlig in r2 and initialised with 0
-    mov r3, #0          @ ncol in r3 et initialised with 0
+    mov r3, #0          @ ncol in r3 and initialised with 0
+    mov r6, #4          @ r6 for multiplying with 4
 
     ldr r10, adr_N_MAX  @ Load the address of N_MAX to r10
     ldrb r4, [r10]      @ Load the value at the address r10 to r4
-    @mov r5, r4         @ r5 = N_MAX
-    sub r4, r4, #1      @ r5 = r5 - 1 (N_MAX - 1)
+    mov r5, r4          @ r5 = N_MAX
+    sub r4, r4, #1      @ r4 = r4 - 1 (N_MAX - 1)
       
     ldr r10, ptr_debutTab   @ Load the address of debutTab to r10
 
@@ -40,11 +41,13 @@ main:
 
             add r8, r2, #1        @ r8 = nlin + 1
             add r9, r3, #1        @ r9 = ncol + 1
-            
             mul r7, r8, r9        @ mult = (nlin + 1) * (ncol + 1), mult in r7
-            mul r8, r7, #4        @ r9 = mult * 4
+        @ addresse r10 + ((N_MAX*nlin) + (ncol))*4 
+            mul r8, r5, r2        @ r8 = n_max * nlin  
+            add r8, r8, r3        @ r8 = n_max * nlin + ncol
+            mul r9, r8, r6        @ r9 = (n_max * nlin + ncol)*4
 
-            str r7, [r10, r8]     @ [r1, r8] où r8 est le decalage par rapport a r1
+            str r7, [r10, r9]     @ [r10, r9] où r9 est le decalage par rapport a r10
 
             add r3, r3, #1        @ ncol += 1
 
@@ -60,6 +63,8 @@ main:
         @ Dans cette partie on incremente le compteur du tableau par 4
         mov r2, #0          @ nlig in r2 and initialised with 0
         mov r3, #0          @ ncol in r3 et initialised with 0
+        ldr r10, ptr_debutTab   @ Load the address of debutTab to r10
+
 
     lp_line:                @ Loop nlin
         cmp r2, r4          @ Compare nlin to N_MAX - 1
@@ -92,8 +97,8 @@ main:
             bl EcrChn           @ Print ' '
 
         end_10:
-            mov r1, r7          @ r1 = 0
-            bl EcrNdecim32      @ Print 0
+            mov r1, r7          @ r1 = mult
+            bl EcrNdecim32      @ Print mult
 
             add r3, r3, #1      @ ncol += 1
 
