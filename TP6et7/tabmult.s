@@ -7,9 +7,9 @@ espace : .byte ' '
          .byte 0
 tirets : .asciz "---"
 
-N_MAX :  .byte 10
-
 debutTab:    .skip 400            @ adresse du debut du tableau and size N_MAX*N_MAX*4
+
+N_MAX :  .byte 10
 
    .text
    .global main
