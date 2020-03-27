@@ -23,12 +23,11 @@ main :
         @ Soit valeur dans r7 (comme mult)
         @ Soit r1 l'adresse de table
 
-        add r8, r2, #1
-        add r9, r3, #1
-        mul r8, r8, r9
-        mul r9, r9, #4
-        str r7, [r1, r8]
-
+        add r8, r2, #1      @ r8 = nlin + 1
+        add r9, r3, #1      @ r9 = ncol + 1
+        mul r7, r8, r9      @ mult = (nlin + 1) * (ncol + 1)
+        mul r8, r7, #4      @ r9 = mult * 4
+        str r7, [r10, r8]    @ [r1, r8] où r8 est le decalage par rapport a r1
 fin: 
     pop {lr}
     bx lr 
